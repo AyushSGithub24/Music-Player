@@ -53,8 +53,7 @@ let idx = 0;
 //play pause btn
 const audio = new Audio("./media/Hanuman Chalisa(PagalWorld.com.sb).mp3")
 let pause = false;
-plyBtn.addEventListener('click', () => {
-    // console.log(plyBtn.innerHTML);
+function pausebtn(){
     if (pause) {
         plyBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
         audio.pause();
@@ -63,7 +62,8 @@ plyBtn.addEventListener('click', () => {
         audio.play();
     }
     pause = !pause
-})
+}
+plyBtn.addEventListener('click', pausebtn())
 //time update
 audio.addEventListener('timeupdate', function () {
     let currentProgress = (audio.currentTime * 100) / audio.duration;
@@ -77,7 +77,7 @@ progress.addEventListener('change', function () {
 
 
 //next and previous functionality
-next.addEventListener('click', () => {
+function nextbtn(){
     idx = (idx + 1) % songs.length;
     audio.src = songs[idx].url;
     audio.currentTime = 0;
@@ -85,9 +85,9 @@ next.addEventListener('click', () => {
     plyBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
     songName.textContent = songs[idx].name;
     pause = true
-})
-
-prev.addEventListener('click',()=>{
+}
+next.addEventListener('click',nextbtn() )
+function prevbtn(){
     if(idx==0){
         idx=4;
     }else{
@@ -99,4 +99,27 @@ prev.addEventListener('click',()=>{
     plyBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
     songName.textContent = songs[idx].name;
     pause = true
+}
+prev.addEventListener('click',prevbtn())
+
+//add keyboard functionality
+window.addEventListener("keydown", (e) => {
+    // console.log(e.code);
+    if(e.code=='Space'|| e.code=='MediaPlayPause'){
+        pausebtn();
+    }
+    else if(e.code=='MediaTrackNext'||(e.code=='ArrowRight')){
+        nextbtn();
+    }
+    else if(e.code=='MediaTrackPrevious' || e.code=='ArrowLeft'){
+        prevbtn();
+    }
 })
+
+let idTimeout=setTimeout(()=>{
+    alert("Now KeyBoard Functionality also added \nUse Space for Play/Pause \nUse left or right arrow key for previous and next track")
+},50)
+
+setTimeout(()=>{
+    clearTimeout(idTimeout)
+},10000);
